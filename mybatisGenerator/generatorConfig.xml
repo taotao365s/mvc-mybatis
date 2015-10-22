@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	<!-- database driver -->
+	<classPathEntry location="H:\Maven_Repositories\mysql\mysql-connector-java\5.1.34\mysql-connector-java-5.1.34.jar" />
+
+	<context id="mysql" targetRuntime="MyBatis3">
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/mvc-mybatis"
+			userId="root" password="shipengyan">
+		</jdbcConnection>
+
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<javaModelGenerator targetPackage="com.spy.mvc.mybatis.model" targetProject="./">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="mappers" targetProject="./">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+
+		<javaClientGenerator type="XMLMAPPER" targetPackage="com.spy.mvc.mybatis.dao" targetProject="./">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+
+		<table schema="USER" tableName="USER" domainObjectName="User">
+			<!-- <property name="useActualColumnNames" value="true" /> -->
+			<generatedKey column="ID" sqlStatement="DB2" identity="true" />
+			<columnOverride column="USER_CODE" property="userCode" />
+			<!-- <ignoreColumn column="FRED" /> -->
+			<!-- <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" /> -->
+		</table>
+
+	</context>
+</generatorConfiguration>
