@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration scan="true" scanPeriod="30 seconds">
+
+	<property name="LOGGER_HOME" value="D:/log/mvc-mybatis" />
+	<property name="ROOT_LEVEL" value="DEBUG" />
+	<property name="LOGGER_LEVEL" value="DEBUG" />
+	<property name="SQL_LEVEL" value="DEBUG" />
+
+	<property name="WEB_LOG_NAME" value="web" />
+	<property name="SQL_LOG_NAME" value="sql" />
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoding>utf-8</encoding>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%-4relative %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level
+				%logger{36}- %msg%n</pattern>
+		</layout>
+	</appender>
+
+	<appender name="BUSI_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoding>utf-8</encoding>
+		<prudent>false</prudent>
+		<append>true</append>
+		<File>${LOGGER_HOME}/${WEB_LOG_NAME}.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>${LOGGER_HOME}/${WEB_LOG_NAME}.log.%i.zip
+			</FileNamePattern>
+			<MinIndex>1</MinIndex>
+			<MaxIndex>50</MaxIndex>
+		</rollingPolicy>
+		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>10mb</MaxFileSize>
+		</triggeringPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%-4relative %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}- %msg%n</Pattern>
+		</layout>
+	</appender>
+
+	<appender name="SQL_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoding>utf-8</encoding>
+		<prudent>false</prudent>
+		<append>true</append>
+		<File>${LOGGER_HOME}/sql.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${LOGGER_HOME}/${SQL_LOG_NAME}.%d{yyyy-MM-dd}-%i.log
+			</FileNamePattern>
+			<MaxHistory>50</MaxHistory>
+			<TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<MaxFileSize>10MB</MaxFileSize>
+			</TimeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%-4relative %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}- %msg%n</pattern>
+		</layout>
+	</appender>
+
+	<root level="${ROOT_LEVEL}">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+	<logger name="com.spy" level="${LOGGER_LEVEL}" additivity="false">
+		<appender-ref ref="BUSI_LOG" />
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+	<logger name="com.spy.mvc.mybatis.dao" level="${SQL_LEVEL}" additivity="false">
+		<appender-ref ref="SQL_LOG" />
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+	<!-- mybatis -->
+	<logger name="org.mybatis.spring" level="${SQL_LEVEL}" additivity="false">
+		<appender-ref ref="SQL_LOG" />
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+	<!-- druid -->
+	<logger name="druid" level="${SQL_LEVEL}" additivity="false">
+		<appender-ref ref="SQL_LOG" />
+		<appender-ref ref="STDOUT" />
+	</logger>
+	<logger name="c.alibaba.druid" level="${SQL_LEVEL}" additivity="false">
+		<appender-ref ref="SQL_LOG" />
+		<appender-ref ref="STDOUT" />
+	</logger>
+</configuration>

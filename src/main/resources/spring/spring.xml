@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation=" 
+           http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans.xsd 
+           http://www.springframework.org/schema/context 
+           http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!--需要扫描的包，@Controller交给spring-mvc来处理 -->
+	<context:component-scan base-package="com.spy.mvc.mybatis">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<!-- i18n, 只能放在spring.xml中否则报错 -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>i18n/Message</value>
+			</list>
+		</property>
+		<property name="cacheSeconds" value="60" /> <!-- 生产环境下不要配置此值 -->
+	</bean>
+
+	<!-- i18n， 只能配置一个 localeResolver -->
+	<!-- <bean id="localeResolver" class="com.spy.mvc.i18n.LocaleResolver"> <property name="languages"> <list> <value>en</value> 
+		<value>zh</value> </list> </property> </bean> -->
+
+	<!-- 处理Restful相关，作为Root bean，mvc作用域的Controller也可以访问 -->
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate" />
+
+	<!-- http -->
+	<!-- <bean id="requestFactory" class="org.springframework.http.client.SimpleClientHttpRequestFactory"> <property name="readTimeout" 
+		value="60000" /> <property name="connectTimeout" value="10000" /> </bean> -->
+
+	<context:property-placeholder location="classpath:config.properties,classpath:db.properties"
+		ignore-unresolvable="true" />
+
+	<!-- <import resource="spring-security.xml" /> -->
+	<import resource="spring-mybatis.xml" />
+</beans> 

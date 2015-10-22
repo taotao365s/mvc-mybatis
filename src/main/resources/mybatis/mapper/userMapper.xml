@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spy.mvc.mybatis.dao.UserDAO">
+
+	<cache />
+
+	<resultMap type="User" id="UserResultMap">
+		<!-- 含有'_'特殊字段，和表中字段映射 -->
+		<result property="userCode" column="USER_CODE" />
+	</resultMap>
+
+	<!-- id和DAO类中方法名一致 -->
+	<select id="getUser" resultMap="UserResultMap">
+		select
+		<include refid="userColumns" />
+		from USER where
+		id=#{id}
+	</select>
+
+	<insert id="addUser" parameterType="User">
+		insert into USER(
+		<include refid="userColumns" />
+		)
+		values
+		(#{id},#{name},#{userCode},#{password}, #{age})
+	</insert>
+
+	<delete id="deleteUser">
+		delete from USER where id= #{id}
+	</delete>
+
+	<update id="updateUser">
+		update USER set password = #{password} where id = #{id}
+	</update>
+
+	<select id="searchUserByName" resultType="User">
+		<bind name="pattern" value="'%' + name + '%'" />
+		select
+		<include refid="userColumns" />
+		from USER where name like #{pattern}
+	</select>
+
+
+	<sql id="userColumns">id,name,user_code,password,age</sql>
+</mapper>

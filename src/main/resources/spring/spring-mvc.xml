@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation=" 
+           http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans.xsd 
+           http://www.springframework.org/schema/context 
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/mvc 
+           http://www.springframework.org/schema/mvc/spring-mvc.xsd
+           http://www.springframework.org/schema/aop 
+           http://www.springframework.org/schema/aop/spring-aop.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx.xsd"
+	default-autowire="byName">
+
+	<!-- 启动对@AspectJ注解的支持 -->
+	<aop:aspectj-autoproxy />
+
+	<!-- 静态资源 -->
+	<mvc:resources location="/frm/" mapping="/frm/**" />
+	<mvc:resources location="/test/" mapping="/test/**" />
+	<mvc:resources location="/*.html" mapping="/*.html" />
+
+	<!-- url重写,或者简单配置页面 -->
+	<!-- <mvc:view-controller path="/" view-name="index.jsp" /> -->
+
+	<!-- 自动扫描的包名，这里只扫描@Controller -->
+	<context:component-scan base-package="com.spy.mvc,com.spy.quick" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+	</context:component-scan>
+
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<ref bean="mappingJackson2HttpMessageConverter" />
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<!-- 处理在类级别上的@RequestMapping注解,功能上等同于mvc:annotation-driven -->
+	<!-- <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"> <property name="interceptors"> 
+		<list> <bean class="com.spy.mvc.interceptor.LocalInterceptor" /> </list> </property> </bean> -->
+
+	<!-- 处理方法级别上的@RequestMapping注解 -->
+	<!-- <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"> <property name="messageConverters"> 
+		<ref bean="mappingJackson2HttpMessageConverter" /> </property> </bean> -->
+
+	<!-- 视图解析器 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- <property name="prefix" value="/WEB-INF/jsp/" /> -->
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<!-- 拦截器，依次拦截 -->
+	<!-- <mvc:interceptors> <ref bean="localeInterceptor" /> <ref bean="localeChangeInterceptor" /> <mvc:interceptor> <mvc:mapping 
+		path="/admin/**" /> <mvc:exclude-mapping path="/admin/xx/**" /> <bean class="com.spy.quick.interceptor.AdminInterceptor"></bean> 
+		</mvc:interceptor> </mvc:interceptors> -->
+
+	<!-- 常用的bean -->
+	<bean id="mappingJackson2HttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>application/json;charset=UTF-8</value>
+				<value>html/text;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- <bean id="localeInterceptor" class="com.spy.mvc.interceptor.LocaleInterceptor" /> -->
+	<bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+</beans> 
