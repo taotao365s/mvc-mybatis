@@ -18,7 +18,7 @@
 		<property name="statementExecutableSqlLogEnable" value="true" />
 	</bean>
 
-	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+	<bean name="dataSourceMaster" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 		<property name="url" value="${jdbc.url}" />
 		<property name="username" value="${jdbc.username}" />
 		<property name="password" value="${jdbc.password}" />
@@ -48,6 +48,46 @@
 		</property>
 	</bean>
 
+	<bean name="dataSourceSlave" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="url" value="${jdbc2.url}" />
+		<property name="username" value="${jdbc2.username}" />
+		<property name="password" value="${jdbc2.password}" />
+
+		<property name="initialSize" value="${jdbc2.initialSize}" />
+		<property name="maxActive" value="${jdbc2.maxActive}" />
+		<property name="maxIdle" value="${jdbc2.maxIdle}" />
+		<property name="minIdle" value="${jdbc2.minIdle}" />
+		<property name="maxWait" value="60000" />
+
+		<!-- mysql 不需要配置 -->
+		<!-- <property name="validationQuery" value="${validationQuery}" /> -->
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<property name="testWhileIdle" value="true" />
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<property name="minEvictableIdleTimeMillis" value="25200000" />
+		<property name="removeAbandoned" value="true" />
+		<property name="removeAbandonedTimeout" value="1800" />
+		<property name="logAbandoned" value="true" />
+		<property name="filters" value="mergeStat" />
+
+		<property name="proxyFilters">
+			<list>
+				<ref bean="log-filter" />
+			</list>
+		</property>
+	</bean>
+
+	<bean name="dataSource" class="com.spy.mvc.mybatis.datasource.DynamicDataSource">
+		<property name="defaultTargetDataSource" ref="dataSourceMaster" />
+		<property name="targetDataSources">
+			<map>
+				<entry key="DATASOURCE_MASTER" value-ref="dataSourceMaster" />
+				<entry key="DATASOURCE_SLAVE" value-ref="dataSourceSlave" />
+			</map>
+		</property>
+	</bean>
+
 	<!-- mybatis核心SqlSessionFactory -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
@@ -64,6 +104,9 @@
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+
+	<!-- 基于注解的事务控制，放在tx:advice之前,添加order可以让其他AOP注解按顺序执行 -->
+	<tx:annotation-driven transaction-manager="transactionManager" order="100" />
 
 	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
@@ -88,9 +131,6 @@
 			<tx:method name="*" propagation="SUPPORTS" />
 		</tx:attributes>
 	</tx:advice>
-
-	<!-- 基于注解的事务控制 -->
-	<tx:annotation-driven transaction-manager="transactionManager" />
 
 	<aop:config>
 		<aop:pointcut id="transactionPointcut" expression="execution(* com.spy.mvc.mybatis.service.impl.*.*(..))" />
