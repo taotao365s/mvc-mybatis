@@ -27,9 +27,9 @@
 	<!-- <mvc:view-controller path="/" view-name="index.jsp" /> -->
 
 	<!-- 自动扫描的包名，这里只扫描@Controller -->
-	<context:component-scan base-package="com.spy.mvc,com.spy.quick" use-default-filters="false">
+	<context:component-scan base-package="com.spy.mvc.mybatis.controller" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
-		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
 	</context:component-scan>
 
 	<!-- Enables the Spring MVC @Controller programming model -->

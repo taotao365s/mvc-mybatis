@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.spy.mvc.mybatis.common.Const;
 import com.spy.mvc.mybatis.datasource.DataSourceContextHolder;
+import com.spy.mvc.mybatis.datasource.annotation.Master;
+import com.spy.mvc.mybatis.datasource.annotation.Slave;
 import com.spy.mvc.mybatis.model.User;
 import com.spy.mvc.mybatis.service.UserService;
 
@@ -30,6 +32,19 @@ public class DynamicDataSourceTest extends BaseSpringTest {
 		int ret = userService.saveUser(createUser());
 		DataSourceContextHolder.removeContextType(); // 读写完后，最好清理下
 		logger.debug("ret value {}", ret);
+	}
+
+	// 以下是注解方式
+
+	@Test
+	@Master
+	public void insertMasterDB() {
+		userService.saveUser(createUser());
+	}
+
+	@Test
+	public void insertSlaveDB2() {
+		userService.saveUser(createUser());
 	}
 
 	private User createUser() {

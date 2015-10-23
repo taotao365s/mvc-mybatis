@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spy.mvc.mybatis.dao.UserDAO;
+import com.spy.mvc.mybatis.datasource.annotation.Slave;
 import com.spy.mvc.mybatis.model.User;
 import com.spy.mvc.mybatis.service.UserService;
 
@@ -29,6 +30,8 @@ public class UserSerivceImpl implements UserService {
 	}
 
 	@Override
+	@Slave
+	// TODO just for test
 	public int saveUser(User user) {
 		return userDAO.addUser(user);
 	}
