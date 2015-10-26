@@ -47,4 +47,5 @@
 
 	<!-- <import resource="spring-security.xml" /> -->
 	<import resource="spring-mybatis.xml" />
+	<import resource="spring-mina.xml" />
 </beans> 

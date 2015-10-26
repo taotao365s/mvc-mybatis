@@ -8,7 +8,6 @@
 	<name>mvc-mybatis Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -26,6 +25,8 @@
 		<spring.version>3.2.8.RELEASE</spring.version>
 		<mybatis.version>3.3.0</mybatis.version>
 		<mybatisspring.version>1.2.3</mybatisspring.version>
+
+		<mina.version>2.0.9</mina.version>
 	</properties>
 
 
@@ -169,6 +170,7 @@
 			<version>${mybatisspring.version}</version>
 		</dependency>
 
+		<!-- druid -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
@@ -180,6 +182,26 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysqlconnector.version}</version>
+		</dependency>
+
+		<!-- mina -->
+
+		<dependency>
+			<groupId>org.apache.mina</groupId>
+			<artifactId>mina-core</artifactId>
+			<version>${mina.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.mina</groupId>
+			<artifactId>mina-integration-beans</artifactId>
+			<version>${mina.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.mina</groupId>
+					<artifactId>mina-core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- test -->
