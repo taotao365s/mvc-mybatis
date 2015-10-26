@@ -10,7 +10,16 @@
 
 
 	<bean name="customProtocolHandler" class="com.spy.mvc.mybatis.mina.CustomProtocolHandler" />
+
 	<bean id="loggingFilter" class="org.apache.mina.filter.logging.LoggingFilter" />
+
+	<bean id="codecFilter" class="org.apache.mina.filter.codec.ProtocolCodecFilter">
+		<constructor-arg>
+			<!-- <bean class="org.apache.mina.filter.codec.textline.TextLineCodecFactory" /> -->
+			<!-- <bean class="cn.org.handler.MyCodeFactory"></bean> -->
+			<bean class="org.apache.mina.filter.codec.textline.TextLineCodecFactory" />
+		</constructor-arg>
+	</bean>
 
 	<!-- The filter chain. -->
 	<bean id="filterChainBuilder" class="org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder">
@@ -18,6 +27,8 @@
 			<map>
 				<entry key="loggingFilter" value-ref="loggingFilter" />
 				<!-- <entry key="codecFilter" value-ref="snmpCodecFilter" /> -->
+				<entry key="codecFilter" value-ref="codecFilter" />
+
 			</map>
 		</property>
 	</bean>
