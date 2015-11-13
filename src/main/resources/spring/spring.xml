@@ -38,6 +38,7 @@
 	<!-- 处理Restful相关，作为Root bean，mvc作用域的Controller也可以访问 -->
 	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate" />
 
+	<bean class="com.spy.mvc.mybatis.listener.SpringApplicationListener" />
 	<!-- http -->
 	<!-- <bean id="requestFactory" class="org.springframework.http.client.SimpleClientHttpRequestFactory"> <property name="readTimeout" 
 		value="60000" /> <property name="connectTimeout" value="10000" /> </bean> -->
